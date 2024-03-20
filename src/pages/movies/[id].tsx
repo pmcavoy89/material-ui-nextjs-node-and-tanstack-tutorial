@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { Typography } from "@mui/material";
 
 export default function Page() {
   const { query } = useRouter();
@@ -19,8 +20,12 @@ export default function Page() {
   if (isError) return <>Error</>;
   return (
     <>
-      <p>Selected Movie: {data?.title}</p>
-      <p>{data?.director}</p>
+      <Typography variant="h2" gutterBottom textAlign="center">
+        {data?.title}
+      </Typography>
+      <Typography variant="h6" textAlign="center">
+        Director: {data?.director}
+      </Typography>
     </>
   );
 }

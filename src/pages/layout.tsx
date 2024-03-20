@@ -10,7 +10,7 @@ export default function RootLayout({
     <>
       <NavBar />
       <main>
-        <Box paddingLeft={4} paddingRight={4}>
+        <Box padding={4}>
           <Paper variant="outlined">{children}</Paper>
         </Box>
       </main>

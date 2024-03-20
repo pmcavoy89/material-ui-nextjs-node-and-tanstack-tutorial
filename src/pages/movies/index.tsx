@@ -1,8 +1,16 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { Alert, Grid, List, ListItemButton } from "@mui/material";
+import {
+  Alert,
+  Grid,
+  List,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import Head from "next/head";
 import { CircularProgress } from "@mui/material";
+// TODO: Create own movie type
 import { Movie } from "../api/movies";
 
 const MoviesPage = () => {
@@ -28,7 +36,7 @@ const MoviesPage = () => {
 
   return (
     <>
-      <h1>Movie List</h1>
+      <Typography variant="h2">Movie List</Typography>
       <List>
         {data?.map((movie: any) => (
           <ListItemButton
@@ -36,7 +44,7 @@ const MoviesPage = () => {
             href={`movies/${movie.id}`}
             key={movie.id}
           >
-            {movie.title}
+            <ListItemText>{movie.title}</ListItemText>
           </ListItemButton>
         ))}
       </List>
