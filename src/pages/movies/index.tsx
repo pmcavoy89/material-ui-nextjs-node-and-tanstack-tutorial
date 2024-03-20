@@ -18,7 +18,8 @@ const MoviesPage = () => {
   if (isError) {
     return (
       <Alert severity="error">
-        A {error.response.status} occurred with the following message;{" "}
+        {/* TODO: Get the type for the error to be AxiosError */}
+        {error.response.status} occurred with the following message;{" "}
         {error.response.data}
       </Alert>
     );
