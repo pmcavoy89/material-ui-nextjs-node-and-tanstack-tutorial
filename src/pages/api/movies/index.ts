@@ -9,16 +9,18 @@ export type Movie = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Movie[]>
+  res: NextApiResponse<Movie[] | string>
 ) {
   switch (req.method) {
     case "GET":
       const movieList: Movie[] = await new Promise((resolve) => {
         setTimeout(() => resolve(movies), 1000);
       });
+
       res.status(200).json(movieList);
       break;
     default:
       console.warn(`/movies: ${req.method} - not a supported method`);
+      res.status(405).send("Method not supported.");
   }
 }
