@@ -9,27 +9,16 @@ export type Movie = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Movie[] | Movie>
+  res: NextApiResponse<Movie[]>
 ) {
-  console.log("here in handler");
   switch (req.method) {
     case "GET":
-      console.log("here");
-      console.log("req = ", req.url);
-      // if (req) {
-      //   const selectedMovie = movies[req.query?.id as unknown as number];
-      //   console.log("selectedMovie = ", selectedMovie);
-      //   res.status(200).json(selectedMovie);
-      // }
+      const movieList: Movie[] = await new Promise((resolve) => {
+        setTimeout(() => resolve(movies), 1000);
+      });
+      res.status(200).json(movieList);
       break;
     default:
-      console.log("no match");
+      console.warn(`/movies: ${req.method} - not a supported method`);
   }
-  console.log("getting movies");
-  const movieList: Movie[] = await new Promise((resolve) => {
-    setTimeout(() => resolve(movies), 1000);
-  });
-  res.status(200).json(movieList);
-
-  console.log("after timeout");
 }

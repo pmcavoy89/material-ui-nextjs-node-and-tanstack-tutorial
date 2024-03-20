@@ -8,7 +8,6 @@ export default function Page() {
     queryKey: ["movies", query.id],
     queryFn: async ({ queryKey }) => {
       const [_, id] = queryKey;
-      console.log("id = ", id);
       const { data } = await axios.get(`/api/movies/${id}`);
 
       return data;

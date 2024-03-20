@@ -1,57 +1,63 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Checkbox,
-  Grid,
-  Link,
-  List,
-  ListItem,
-  ListItemButton,
-} from "@mui/material";
+import { Alert, Grid, List, ListItemButton } from "@mui/material";
 import Head from "next/head";
 import { CircularProgress } from "@mui/material";
+import { Movie } from "../api/movies";
 
-const MoviesPage = ({ children }: any) => {
+const MoviesPage = () => {
   const { data, error, isError, isFetching } = useQuery({
-    queryKey: ["movie-list"],
+    queryKey: ["movies"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/movies");
+      const { data } = await axios.get<Movie[]>("/api/movies");
 
       return data;
     },
   });
 
-  if (isError) return <>Failed to load</>;
+  if (isError) {
+    return (
+      <Alert severity="error">
+        A {error.response.status} occurred with the following message;{" "}
+        {error.response.data}
+      </Alert>
+    );
+  }
   if (isFetching) return <CircularProgress />;
+
   return (
     <>
-      <Head>
-        <title>Movies - GET</title>
-      </Head>
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Grid item>
-          <h1>Movie List</h1>
-          <List>
-            {data.map((movie) => (
-              <ListItemButton
-                component="a"
-                href={`movies/${movie.id}`}
-                key={movie.id}
-              >
-                {movie.title}
-              </ListItemButton>
-            ))}
-          </List>
-        </Grid>
-      </Grid>
+      <h1>Movie List</h1>
+      <List>
+        {data?.map((movie: any) => (
+          <ListItemButton
+            component="a"
+            href={`movies/${movie.id}`}
+            key={movie.id}
+          >
+            {movie.title}
+          </ListItemButton>
+        ))}
+      </List>
     </>
   );
 };
+
+MoviesPage.layout = (page: any) => (
+  <>
+    <Head>
+      <title>Movies - GET</title>
+    </Head>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Grid item>{page}</Grid>
+    </Grid>
+  </>
+);
 
 export default MoviesPage;

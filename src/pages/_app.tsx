@@ -18,12 +18,11 @@ const queryClient = new QueryClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const componentLayout = Component.layout ?? ((page: any) => page);
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={createTheme()}>
-        <RootLayout>
-          <Component {...pageProps} />
-        </RootLayout>
+        <RootLayout>{componentLayout(<Component {...pageProps} />)}</RootLayout>
       </ThemeProvider>
     </QueryClientProvider>
   );
