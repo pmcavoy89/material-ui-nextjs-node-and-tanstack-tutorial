@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
+import { theme } from "@/utils";
 import RootLayout from "./layout";
 
 import "@fontsource/roboto/300.css";
@@ -21,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const componentLayout = Component.layout ?? ((page: any) => page);
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={createTheme()}>
+      <ThemeProvider theme={createTheme(theme)}>
         <RootLayout>{componentLayout(<Component {...pageProps} />)}</RootLayout>
       </ThemeProvider>
     </QueryClientProvider>
