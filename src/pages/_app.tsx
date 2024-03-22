@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import { useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
@@ -19,11 +20,15 @@ const queryClient = new QueryClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [isDarkMode, setDarkMode] = useState(true);
   const componentLayout = Component.layout ?? ((page: any) => page);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={createTheme(theme)}>
-        <RootLayout>{componentLayout(<Component {...pageProps} />)}</RootLayout>
+      <ThemeProvider theme={createTheme(theme({ isDarkMode }))}>
+        <RootLayout handleDarkMode={setDarkMode} isDarkMode={isDarkMode}>
+          {componentLayout(<Component {...pageProps} />)}
+        </RootLayout>
       </ThemeProvider>
     </QueryClientProvider>
   );

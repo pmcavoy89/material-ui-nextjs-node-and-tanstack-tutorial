@@ -1,11 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import movies from "../mock-data/movies";
-
-export type Movie = {
-  director: string;
-  title: string;
-  id: number;
-};
+import movies, { Movie } from "../mock-data/movies";
 
 export default async function handler(
   req: NextApiRequest,

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import {
   Alert,
+  Box,
   Grid,
   List,
   ListItemButton,
@@ -10,8 +11,7 @@ import {
 } from "@mui/material";
 import Head from "next/head";
 import { CircularProgress } from "@mui/material";
-// TODO: Create own movie type
-import { Movie } from "../api/movies";
+import { Movie } from "../api/mock-data/movies";
 
 const MoviesPage = () => {
   const { data, error, isError, isFetching } = useQuery({
@@ -35,20 +35,23 @@ const MoviesPage = () => {
   if (isFetching) return <CircularProgress />;
 
   return (
-    <>
+    <Box>
       <Typography variant="h2">Movie List</Typography>
       <List>
-        {data?.map((movie: any) => (
+        {/* TODO: Make a reusable presentational component (MovieListItemButton) */}
+        {data?.map((movie: Movie) => (
           <ListItemButton
             component="a"
             href={`movies/${movie.id}`}
             key={movie.id}
           >
-            <ListItemText>{movie.title}</ListItemText>
+            <ListItemText>
+              {movie.title} - {movie.year}{" "}
+            </ListItemText>
           </ListItemButton>
         ))}
       </List>
-    </>
+    </Box>
   );
 };
 
