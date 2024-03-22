@@ -20,7 +20,8 @@ const queryClient = new QueryClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [isDarkMode, setDarkMode] = useState(true);
+  // TODO: Make it persist page to page, Redux? Local storage?
+  const [isDarkMode, setDarkMode] = useState<boolean>(true);
   const componentLayout = Component.layout ?? ((page: any) => page);
 
   return (

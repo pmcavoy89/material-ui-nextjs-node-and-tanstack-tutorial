@@ -1,17 +1,10 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Alert,
-  Box,
-  Grid,
-  List,
-  ListItemButton,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { Alert, Grid, Typography } from "@mui/material";
 import Head from "next/head";
 import { CircularProgress } from "@mui/material";
 import { Movie } from "../api/mock-data/movies";
+import MovieCard from "@/components/MovieCard";
 
 const MoviesPage = () => {
   const { data, error, isError, isFetching } = useQuery({
@@ -35,23 +28,16 @@ const MoviesPage = () => {
   if (isFetching) return <CircularProgress />;
 
   return (
-    <Box>
-      <Typography variant="h2">Movie List</Typography>
-      <List>
-        {/* TODO: Make a reusable presentational component (MovieListItemButton) */}
+    <Grid container alignItems="center" paddingLeft={7}>
+      <Grid item xs={12}>
+        <Typography variant="h2">Movie List</Typography>
+      </Grid>
+      <Grid container spacing={5}>
         {data?.map((movie: Movie) => (
-          <ListItemButton
-            component="a"
-            href={`movies/${movie.id}`}
-            key={movie.id}
-          >
-            <ListItemText>
-              {movie.title} - {movie.year}{" "}
-            </ListItemText>
-          </ListItemButton>
+          <MovieCard key={movie.id} {...movie} />
         ))}
-      </List>
-    </Box>
+      </Grid>
+    </Grid>
   );
 };
 
@@ -62,7 +48,6 @@ MoviesPage.layout = (page: any) => (
     </Head>
     <Grid
       container
-      spacing={0}
       direction="column"
       alignItems="center"
       justifyContent="center"
