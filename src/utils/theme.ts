@@ -2,7 +2,7 @@ import { ThemeOptions } from "@mui/material";
 
 const theme = ({ isDarkMode }: { isDarkMode: boolean }): ThemeOptions => ({
   palette: {
-    mode: isDarkMode ? "dark" : "",
+    mode: isDarkMode ? "dark" : "light",
     primary: {
       main: "#00ff00",
     },
