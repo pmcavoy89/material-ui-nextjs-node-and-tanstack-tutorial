@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import {
   Alert,
   CircularProgress,
@@ -42,6 +43,8 @@ export default function MovieDetailsPage() {
   }
 
   // TODO: Clean up component
+  // TODO: Figre out how I want to lay out the data
+  // TODO: Write tests
   return (
     <>
       <MovieCrumbs>{data?.title}</MovieCrumbs>
@@ -80,6 +83,14 @@ export default function MovieDetailsPage() {
           <Typography variant="h6" textAlign="center">
             Running Time: {data?.runningTime}
           </Typography>
+        </Grid>
+        <Grid item>
+          <Image
+            alt={`${data.title}`}
+            width={400}
+            height={200}
+            src={`/images/${data.id}.jpg`}
+          />
         </Grid>
       </Grid>
     </>

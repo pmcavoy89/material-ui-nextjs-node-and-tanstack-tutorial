@@ -28,7 +28,7 @@ const MoviesPage = () => {
   if (isFetching) return <CircularProgress />;
 
   return (
-    <Grid container alignItems="center" paddingLeft={7}>
+    <Grid container alignItems="center" paddingLeft={7} marginBottom={7}>
       <Grid item xs={12}>
         <Typography variant="h2">Movie List</Typography>
       </Grid>
