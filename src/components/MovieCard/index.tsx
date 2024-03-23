@@ -10,10 +10,10 @@ import {
 
 const MovieCard = ({ title, year, runningTime, rating, id }: Movie) => (
   <Grid item>
-    <Card sx={{ maxWidth: 300 }}>
-      <CardActionArea href={`/movies/${id}`}>
+    <CardActionArea href={`/movies/${id}`}>
+      <Card sx={{ width: 300, height: 300 }}>
         <CardMedia
-          sx={{ height: 140 }}
+          sx={{ height: 150 }}
           image={`images/${id}.jpg`}
           title={`${title}`}
         />
@@ -25,8 +25,8 @@ const MovieCard = ({ title, year, runningTime, rating, id }: Movie) => (
             Rated: {rating} Year: {year} Running Time: {runningTime}{" "}
           </Typography>
         </CardContent>
-      </CardActionArea>
-    </Card>
+      </Card>
+    </CardActionArea>
   </Grid>
 );
 
