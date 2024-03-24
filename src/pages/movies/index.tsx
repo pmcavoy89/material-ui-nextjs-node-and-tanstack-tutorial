@@ -32,7 +32,11 @@ const MoviesPage = () => {
       <Grid item xs={12} textAlign="center">
         <Typography variant="h2">Movie List</Typography>
       </Grid>
-      <Grid container spacing={3}>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+      >
         {data?.map((movie: Movie) => (
           <MovieCard key={movie.id} {...movie} />
         ))}
