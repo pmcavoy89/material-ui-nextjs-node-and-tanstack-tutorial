@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 const MovieCard = ({ title, year, runningTime, rating, id }: Movie) => (
-  <Grid item>
+  <Grid item xs={3}>
     <CardActionArea href={`/movies/${id}`}>
       <Card sx={{ width: 300, height: 300 }}>
         <CardMedia
