@@ -18,7 +18,7 @@ const MoviesPage = () => {
       </Alert>
     );
   }
-  if (isFetching) return <CircularProgress />;
+  if (isFetching) return <CircularProgress data-testid="loading-movies" />;
 
   return (
     <Grid container alignItems="center" paddingLeft={7} paddingBottom={7}>
