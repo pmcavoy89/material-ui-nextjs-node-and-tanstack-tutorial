@@ -91,7 +91,7 @@ export default function MovieDetailsPage() {
             width={500}
             height={700}
             loading="lazy"
-            src={`https://image.tmdb.org/t/p/w500${data.posterPath}`}
+            src={`https://image.tmdb.org/t/p/w500/${data?.posterPath}`}
           />
         </Grid>
       </Grid>
