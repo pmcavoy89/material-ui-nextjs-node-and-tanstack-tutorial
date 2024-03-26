@@ -70,7 +70,7 @@ export default function MovieDetailsPage() {
         </Grid>
         <Grid item>
           <Typography variant="h6" textAlign="center">
-            {/* TODO: Reuse List Componet Above  */}
+            {/* TODO: Reuse List Component Above  */}
             Writers: {data?.writers}
           </Typography>
         </Grid>
@@ -87,9 +87,9 @@ export default function MovieDetailsPage() {
         <Grid item>
           <Image
             alt={`${data.title}`}
-            width={400}
-            height={200}
-            src={`/images/${data.id}.jpg`}
+            width={500}
+            height={700}
+            src={`https://image.tmdb.org/t/p/w500${data.posterPath}`}
           />
         </Grid>
       </Grid>

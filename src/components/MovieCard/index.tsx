@@ -10,14 +10,21 @@ import {
   Typography,
 } from "@mui/material";
 
-const MovieCard = ({ title, year, runningTime, rating, id }: Movie) => (
+const MovieCard = ({
+  title,
+  year,
+  runningTime,
+  rating,
+  id,
+  posterPath,
+}: Movie) => (
   <Grid item xs={4} sm={4} md={3} textAlign="center">
     <CardActionArea href={`/movies/${id}`}>
       {/* TODO: Figure a better way to layout the content in the card for different title lengths */}
-      <Card sx={{ width: 300, height: 350 }}>
+      <Card sx={{ width: 300, height: 750 }}>
         <CardMedia
-          sx={{ height: 150 }}
-          image={`images/${id}.jpg`}
+          sx={{ height: 500 }}
+          image={`https://image.tmdb.org/t/p/w500/${posterPath}`}
           title={`${title}`}
         />
         <CardContent>

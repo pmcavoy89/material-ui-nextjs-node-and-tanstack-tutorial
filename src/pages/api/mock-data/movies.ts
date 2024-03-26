@@ -4,6 +4,7 @@ export interface Movie {
   runningTime: string;
   rating: string;
   id: number;
+  posterPath?: string;
 }
 
 const movies: Movie[] = [
