@@ -2,15 +2,30 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import movies, { Movie } from "../mock-data/movies";
 import axios from "axios";
 
+interface MoviesResponse {
+  movies: Movie[];
+  pages: number;
+}
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Movie[] | string>
+  res: NextApiResponse<MoviesResponse | string>
 ) {
-  const url = `${process.env.MOVIE_DB_API}/discover/movie?include_adult=true&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${process.env.MOVIE_DB_API_KEY}`;
+  const { page } = req.query;
+  const url = `${process.env.MOVIE_DB_API}/discover/movie`;
 
   switch (req.method) {
     case "GET":
-      const { data } = await axios.get(url);
+      const { data } = await axios.get(url, {
+        params: {
+          api_key: `${process.env.MOVIE_DB_API_KEY}`,
+          include_adult: true,
+          include_video: false,
+          language: "en-US",
+          page,
+          sort_by: "popularity.desc",
+        },
+      });
       const movieList: Movie[] = data?.results.map((m: any) => ({
         title: m.title,
         year: m.release_date,
@@ -23,7 +38,10 @@ export default async function handler(
       //   setTimeout(() => resolve(movies), 1000);
       // });
 
-      res.status(200).json(movieList);
+      res.status(200).json({
+        movies: movieList,
+        pages: data.total_pages,
+      });
       break;
     default:
       console.warn(`/movies: ${req.method} - not a supported method`);

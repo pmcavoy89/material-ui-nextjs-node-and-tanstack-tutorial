@@ -1,12 +1,16 @@
-import { Alert, Grid, Typography } from "@mui/material";
+import { Alert, Grid, Pagination, Typography } from "@mui/material";
 import Head from "next/head";
 import { CircularProgress } from "@mui/material";
 import { Movie } from "../api/mock-data/movies";
 import MovieCard from "@/components/MovieCard";
 import useMovies from "@/hooks/useMovies";
+import { useState } from "react";
 
 const MoviesPage = () => {
-  const { data, error, isError, isFetching } = useMovies();
+  const [selectedPage, setSelectedPage] = useState<number>(1);
+  const { data, error, isError, isFetching } = useMovies({
+    page: selectedPage,
+  });
 
   if (isError) {
     return (
@@ -30,9 +34,16 @@ const MoviesPage = () => {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {data?.map((movie: Movie) => (
+        {data?.movies.map((movie: Movie) => (
           <MovieCard key={movie.id} {...movie} />
         ))}
+      </Grid>
+      <Grid item xs={12} textAlign="center">
+        <Pagination
+          count={data?.pages}
+          page={selectedPage}
+          onChange={(_, page) => setSelectedPage(page)}
+        />
       </Grid>
     </Grid>
   );

@@ -14,7 +14,8 @@ import MovieCrumbs from "@/components/MovieCrumbs";
 
 export default function MovieDetailsPage() {
   const { query } = useRouter();
-  const { data, error, isError, isFetching, isPending } = useQuery({
+  // TODO: Create a custom hook
+  const { data, error, isError, isFetching } = useQuery({
     queryKey: ["movies", query.id],
     queryFn: async ({ queryKey }) => {
       const [_, id] = queryKey;
@@ -25,7 +26,7 @@ export default function MovieDetailsPage() {
     enabled: !!query.id,
   });
 
-  if (isFetching || isPending)
+  if (isFetching)
     return (
       <Stack alignItems="center">
         <CircularProgress />
@@ -86,9 +87,10 @@ export default function MovieDetailsPage() {
         </Grid>
         <Grid item>
           <Image
-            alt={`${data.title}`}
+            alt={`${data?.title}`}
             width={500}
             height={700}
+            loading="lazy"
             src={`https://image.tmdb.org/t/p/w500${data.posterPath}`}
           />
         </Grid>
