@@ -1,5 +1,3 @@
-import axios, { AxiosError } from "axios";
-import { useQuery } from "@tanstack/react-query";
 import { Alert, Grid, Typography } from "@mui/material";
 import Head from "next/head";
 import { CircularProgress } from "@mui/material";

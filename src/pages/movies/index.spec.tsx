@@ -1,34 +1,45 @@
 import "@testing-library/jest-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render } from "@testing-library/react";
-import useMovies from "@/hooks/useMovies";
+import { render, waitFor } from "@testing-library/react";
+import axios, { AxiosError, AxiosHeaders } from "axios";
 import MoviesPage from ".";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 0,
+      retry: false,
     },
   },
 });
 
-jest.mock("../../hooks/useMovies");
+jest.mock("axios");
 
+// TODO: Clean up code
 describe("Movies Page Spec", () => {
-  it("handles the error", () => {
+  it("handles the error", async () => {
     // Arrange
-    (useMovies as jest.Mock).mockReturnValue({
-      error: {
-        response: {
-          status: 404,
-          data: "an error",
-        },
+    const config = {
+      headers: new AxiosHeaders(),
+    };
+    const axiosErrorMock: AxiosError = {
+      name: "AxiosError",
+      message: "Simulated error message",
+      isAxiosError: true,
+      config,
+      code: "ERR_CODE",
+      toJSON: () => ({}),
+      response: {
+        status: 404,
+        statusText: "Some Text",
+        data: "Not Found",
+        headers: {},
+        config,
       },
-      isError: true,
-    });
+    };
+
+    (axios.get as jest.Mock).mockRejectedValue(axiosErrorMock);
 
     // Act
-    // TODO: Get testing-library render going
     const { getByTestId } = render(
       <QueryClientProvider client={queryClient}>
         <MoviesPage />
@@ -36,8 +47,10 @@ describe("Movies Page Spec", () => {
     );
 
     // Assert
-    expect(getByTestId("movie-page-error")).toHaveTextContent(
-      "Status Code: 404 occurred with the following message;an error"
-    );
+    await waitFor(() => {
+      expect(getByTestId("movie-page-error")).toHaveTextContent(
+        "Status Code: 404 occurred with the following message;Not Found"
+      );
+    });
   });
 });
