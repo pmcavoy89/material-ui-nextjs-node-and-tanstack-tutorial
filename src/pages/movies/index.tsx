@@ -5,21 +5,16 @@ import Head from "next/head";
 import { CircularProgress } from "@mui/material";
 import { Movie } from "../api/mock-data/movies";
 import MovieCard from "@/components/MovieCard";
+import useMovies from "@/hooks/useMovies";
 
 const MoviesPage = () => {
-  const { data, error, isError, isFetching } = useQuery<Movie[], AxiosError>({
-    queryKey: ["movies"],
-    queryFn: async () => {
-      const { data } = await axios.get<Movie[]>("/api/movies");
-
-      return data;
-    },
-  });
+  const { data, error, isError, isFetching } = useMovies();
 
   if (isError) {
     return (
-      <Alert severity="error">
-        {error?.response?.status} occurred with the following message;
+      <Alert severity="error" data-testid="movie-page-error">
+        Status Code: {error?.response?.status} occurred with the following
+        message;
         {/* TODO: Fix the typecasting */}
         {error?.response?.data as string}
       </Alert>
