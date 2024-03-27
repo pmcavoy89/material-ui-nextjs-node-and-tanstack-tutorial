@@ -1,8 +1,7 @@
-import "@testing-library/jest-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, waitFor } from "@testing-library/react";
 import axios, { AxiosError, AxiosHeaders, AxiosResponse } from "axios";
-import MoviesPage from ".";
+import MovieDetailsPage from "./[id]";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -11,11 +10,31 @@ const queryClient = new QueryClient({
     },
   },
 });
+const randomId = Math.random();
 
 jest.mock("axios");
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      route: "/",
+      pathname: "",
+      query: {
+        id: randomId,
+      },
+      asPath: "",
+      push: jest.fn(),
+      events: {
+        on: jest.fn(),
+        off: jest.fn(),
+      },
+      beforePopState: jest.fn(() => null),
+      prefetch: jest.fn(() => null),
+    };
+  },
+}));
 
 // TODO: Clean up code
-describe("Movies Page Spec", () => {
+describe.only("Movie Details Page Spec", () => {
   it("handles the error", async () => {
     // Arrange
     const config = {
@@ -36,43 +55,38 @@ describe("Movies Page Spec", () => {
         config,
       },
     };
-
     (axios.get as jest.Mock).mockRejectedValue(axiosErrorMock);
 
     // Act
     const { getByTestId } = render(
       <QueryClientProvider client={queryClient}>
-        <MoviesPage />
+        <MovieDetailsPage />
       </QueryClientProvider>
     );
-
     // Assert
-    expect(getByTestId("loading-movies")).toBeInTheDocument();
+    expect(getByTestId("loading-movie-details")).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(getByTestId("movies-page-error")).toHaveTextContent(
+      expect(getByTestId("movie-details-page-error")).toHaveTextContent(
         "Error Status Code: 404 Error Message: Not Found"
       );
     });
   });
 
-  it("handles the fetching the movies", async () => {
+  it("handles the fetching the movie's details", async () => {
     // Arrange
     const config = {
       headers: new AxiosHeaders(),
     };
     const axiosResponseMock: AxiosResponse = {
       data: {
-        movies: [
-          {
-            title: "The Shawshank Redemption",
-            year: 1994,
-            runningTime: "2h 22m",
-            rating: "R",
-            id: 1,
-          },
-        ],
-        page: 1,
+        runningTime: 118,
+        year: "2023-04-13",
+        title: "Some Movie",
+        writers: ["Some Writer"],
+        director: ["Some Director"],
+        actors: ["Some Actors"],
+        posterPath: "/some-poster-path.jpg",
       }, // Simulated response data
       status: 200, // Simulated status code
       statusText: "OK", // Simulated status text
@@ -80,21 +94,21 @@ describe("Movies Page Spec", () => {
       config,
       request: {}, // Simulated request object
     };
-
     (axios.get as jest.Mock).mockResolvedValue(axiosResponseMock);
 
     // Act
-    const { getByTestId, getByText } = render(
+    const { getByTestId, getAllByText } = render(
       <QueryClientProvider client={queryClient}>
-        <MoviesPage />
+        <MovieDetailsPage />
       </QueryClientProvider>
     );
 
     // Assert
-    expect(getByTestId("loading-movies")).toBeInTheDocument();
+    expect(getByTestId("loading-movie-details")).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(getByText("The Shawshank Redemption")).toBeInTheDocument();
+      expect(getAllByText("Some Movie")[0]).toBeInTheDocument();
+      expect(getAllByText("Some Movie")[1]).toBeInTheDocument();
     });
   });
 });

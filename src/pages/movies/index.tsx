@@ -1,4 +1,4 @@
-import { Alert, Grid, Pagination, Typography } from "@mui/material";
+import { Alert, Grid, Pagination, Stack, Typography } from "@mui/material";
 import Head from "next/head";
 import { CircularProgress } from "@mui/material";
 import { Movie } from "../api/mock-data/movies";
@@ -14,15 +14,19 @@ const MoviesPage = () => {
 
   if (isError) {
     return (
-      <Alert severity="error" data-testid="movie-page-error">
-        Status Code: {error?.response?.status} occurred with the following
-        message;
+      <Alert severity="error" data-testid="movies-page-error">
         {/* TODO: Fix the typecasting */}
-        {error?.response?.data as string}
+        Error Status Code: {error?.response?.status} <br />
+        Error Message: {error?.response?.statusText}
       </Alert>
     );
   }
-  if (isFetching) return <CircularProgress data-testid="loading-movies" />;
+  if (isFetching)
+    return (
+      <Stack alignItems="center">
+        <CircularProgress data-testid="loading-movies" />
+      </Stack>
+    );
 
   return (
     <Grid container alignItems="center" paddingLeft={7} paddingBottom={7}>

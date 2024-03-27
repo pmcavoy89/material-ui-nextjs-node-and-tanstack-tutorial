@@ -1,5 +1,3 @@
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import {
@@ -9,37 +7,31 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { MovieDetails } from "../api/mock-data/movies-details";
 import MovieCrumbs from "@/components/MovieCrumbs";
+import useMovieDetails from "@/hooks/useMovieDetails";
+import Head from "next/head";
 
 export default function MovieDetailsPage() {
   const { query } = useRouter();
-  // TODO: Create a custom hook
-  const { data, error, isError, isFetching } = useQuery({
-    queryKey: ["movies", query.id],
-    queryFn: async ({ queryKey }) => {
-      const [_, id] = queryKey;
-      const { data } = await axios.get<MovieDetails>(`/api/movies/${id}`);
-
-      return data;
-    },
-    enabled: !!query.id,
+  const { data, error, isError, isFetching } = useMovieDetails({
+    id: query.id,
   });
-
-  if (isFetching)
-    return (
-      <Stack alignItems="center">
-        <CircularProgress />
-      </Stack>
-    );
 
   if (isError) {
     // TODO: Figure out the error object type definition
     return (
-      <Alert severity="warning">
+      <Alert severity="error" data-testid="movie-details-page-error">
         Error Status Code: {error?.response?.status} <br />
         Error Message: {error?.response?.statusText}
       </Alert>
+    );
+  }
+
+  if (isFetching) {
+    return (
+      <Stack alignItems="center">
+        <CircularProgress data-testid="loading-movie-details" />
+      </Stack>
     );
   }
 
@@ -47,7 +39,7 @@ export default function MovieDetailsPage() {
   // TODO: Figre out how I want to lay out the data
   // TODO: Write tests
   return (
-    <>
+    <Grid container alignItems="center" paddingLeft={7} paddingBottom={7}>
       <MovieCrumbs>{data?.title}</MovieCrumbs>
       <Typography variant="h2" gutterBottom textAlign="center">
         {data?.title}
@@ -95,6 +87,22 @@ export default function MovieDetailsPage() {
           />
         </Grid>
       </Grid>
-    </>
+    </Grid>
   );
 }
+
+MovieDetailsPage.layout = (page: any) => (
+  <>
+    <Head>
+      <title>Movies - GET</title>
+    </Head>
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Grid>{page}</Grid>
+    </Grid>
+  </>
+);

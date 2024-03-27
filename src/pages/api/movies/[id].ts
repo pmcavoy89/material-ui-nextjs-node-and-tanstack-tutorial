@@ -10,35 +10,41 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       if (req.query.id) {
-        const movieDetailsUrl = `${process.env.MOVIE_DB_API}/movie/${req.query.id}`;
-        const movieCreditsUrl = `${process.env.MOVIE_DB_API}/movie/${req.query.id}/credits`;
-        const axiosConfig = {
-          params: { api_key: `${process.env.MOVIE_DB_API_KEY}` },
-        };
-        const movieDetailsResponse = axios.get(movieDetailsUrl, axiosConfig);
-        const movieCreditsResponse = axios.get(movieCreditsUrl, axiosConfig);
+        // TODO: Clean up code
+        try {
+          const movieDetailsUrl = `${process.env.MOVIE_DB_API}/movie/${req.query.id}`;
+          const movieCreditsUrl = `${process.env.MOVIE_DB_API}/movie/${req.query.id}/credits`;
+          const axiosConfig = {
+            params: { api_key: `${process.env.MOVIE_DB_API_KEY}` },
+          };
+          const movieDetailsResponse = axios.get(movieDetailsUrl, axiosConfig);
+          const movieCreditsResponse = axios.get(movieCreditsUrl, axiosConfig);
 
-        const [{ data: movieDetailsData }, { data: movieCreditsData }] =
-          await Promise.all([movieDetailsResponse, movieCreditsResponse]);
+          const [{ data: movieDetailsData }, { data: movieCreditsData }] =
+            await Promise.all([movieDetailsResponse, movieCreditsResponse]);
 
-        const response = {
-          runningTime: movieDetailsData?.runtime,
-          year: movieDetailsData?.release_date,
-          title: movieDetailsData?.title,
-          writers: movieCreditsData.crew
-            .filter((c: any) => c.job === "Writer")
-            .map((c: any) => c.name),
-          director: movieCreditsData.crew
-            .filter((c: any) => c.job === "Director")
-            .map((c: any) => c.name),
-          actors: movieCreditsData.cast.map((c: any) => c.name),
-          posterPath: movieDetailsData?.backdrop_path,
-        };
+          const response = {
+            runningTime: movieDetailsData?.runtime,
+            year: movieDetailsData?.release_date,
+            title: movieDetailsData?.title,
+            writers: movieCreditsData.crew
+              .filter((c: any) => c.job === "Writer")
+              .map((c: any) => c.name),
+            director: movieCreditsData.crew
+              .filter((c: any) => c.job === "Director")
+              .map((c: any) => c.name),
+            actors: movieCreditsData.cast.map((c: any) => c.name),
+            posterPath: movieDetailsData?.backdrop_path,
+          };
 
-        res.status(200).json({
-          ...response,
-        } as MovieDetails);
-
+          res.status(200).json({
+            ...response,
+          } as MovieDetails);
+        } catch (e) {
+          res.status(e?.response.status ?? 500).json({
+            statusText: e?.response?.statusText,
+          });
+        }
         // const movieList: Movie[] = await new Promise((resolve) => {
         //   setTimeout(() => resolve(movies), 1000);
         // });

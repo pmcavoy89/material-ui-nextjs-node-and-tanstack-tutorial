@@ -3,11 +3,16 @@ import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
 // TODO: Define a return type
-const useMovies = (): any => {
+const useMovies = ({ page }: { page: number }): any => {
   const { data, error, isError, isFetching } = useQuery<Movie[], AxiosError>({
-    queryKey: ["movies"],
+    queryKey: ["movies", page],
+    // TODO: Move to Service Layer
     queryFn: async () => {
-      const { data } = await axios.get<Movie[]>("/api/movies");
+      const { data } = await axios.get<Movie[]>("/api/movies", {
+        params: {
+          page,
+        },
+      });
 
       return data;
     },
