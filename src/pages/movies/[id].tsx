@@ -18,6 +18,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import MovieCrumbs from "@/components/MovieCrumbs";
 import useMovieDetails from "@/hooks/useMovieDetails";
 import Head from "next/head";
+import { format } from "date-fns";
 
 const ActorItem = ({ name }: { name: string }) => (
   <ListItem>
@@ -59,7 +60,7 @@ export default function MovieDetailsPage() {
     );
   }
 
-  if (isFetching) {
+  if (isFetching || data === undefined) {
     return (
       <Stack alignItems="center">
         <CircularProgress data-testid="loading-movie-details" />
@@ -88,7 +89,7 @@ export default function MovieDetailsPage() {
         </Typography>
       </Grid>
       <Grid item xs={10} sm={4} md={3}>
-        <Card variant="outlined" sx={{ maxWidth: "200px" }}>
+        <Card variant="outlined" sx={{ width: "240px" }}>
           <CardContent>
             <Typography
               sx={{ fontSize: 14 }}
@@ -106,7 +107,7 @@ export default function MovieDetailsPage() {
               />
             </Typography>
             <Typography variant="h5" component="div">
-              Release year: {data?.year}
+              Release year: {format(data?.year, "M/d/yyyy")}
             </Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
               Running Time: {data?.runningTime}
