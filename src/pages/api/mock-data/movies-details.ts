@@ -3,6 +3,7 @@ import { Movie } from "./movies";
 export interface MovieDetails extends Movie {
   actors: string[];
   director: string;
+  voteAverage?: number;
   writers: string[];
 }
 

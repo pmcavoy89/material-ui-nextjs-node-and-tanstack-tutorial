@@ -8,6 +8,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
+  Rating,
   Stack,
   Typography,
 } from "@mui/material";
@@ -69,7 +70,6 @@ export default function MovieDetailsPage() {
   // TODO: Clean up component
   // TODO: Figure out where I want to place the image
   // TODO: Write tests
-
   return (
     <Grid
       container
@@ -95,7 +95,15 @@ export default function MovieDetailsPage() {
               color="text.secondary"
               gutterBottom
             >
-              Rating: {data?.rating}
+              Rating:{" "}
+              <Rating
+                name="half-rating-read"
+                defaultValue={data?.voteAverage}
+                max={10}
+                precision={0.5}
+                size="small"
+                readOnly
+              />
             </Typography>
             <Typography variant="h5" component="div">
               Release year: {data?.year}
@@ -132,7 +140,7 @@ export default function MovieDetailsPage() {
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           aria-label="contacts"
         >
-          {data?.writers.slice(0, 9).map((name: string) => (
+          {data?.writers.slice(0, 2).map((name: string) => (
             <Writer key={name} name={name} />
           ))}
         </List>

@@ -35,6 +35,7 @@ export default async function handler(
               .map((c: any) => c.name),
             actors: movieCreditsData.cast.map((c: any) => c.name),
             posterPath: movieDetailsData?.backdrop_path,
+            voteAverage: movieDetailsData?.vote_average,
           };
 
           res.status(200).json({
