@@ -14,7 +14,11 @@ export default function RootLayout({
     <>
       <NavBar handleDarkMode={handleDarkMode} isDarkMode={isDarkMode} />
       <main>
-        <Box paddingTop={10}>
+        <Box
+          px={{ xs: 2, sm: 5, md: 10, lg: 10 }}
+          paddingTop={10}
+          paddingBottom={5}
+        >
           <Paper variant="outlined">{children}</Paper>
         </Box>
       </main>

@@ -1,15 +1,47 @@
 import { useRouter } from "next/router";
-import Image from "next/image";
 import {
   Alert,
+  Card,
+  CardContent,
   CircularProgress,
   Grid,
+  List,
+  ListItem,
+  ListItemIcon,
   Stack,
   Typography,
 } from "@mui/material";
+import StarIcon from "@mui/icons-material/Star";
+import TheatersIcon from "@mui/icons-material/Theaters";
+import EditNoteIcon from "@mui/icons-material/EditNote";
 import MovieCrumbs from "@/components/MovieCrumbs";
 import useMovieDetails from "@/hooks/useMovieDetails";
 import Head from "next/head";
+
+const ActorItem = ({ name }: { name: string }) => (
+  <ListItem>
+    <ListItemIcon>
+      <StarIcon />
+    </ListItemIcon>
+    {name}
+  </ListItem>
+);
+const Director = ({ name }: { name: string }) => (
+  <ListItem>
+    <ListItemIcon>
+      <TheatersIcon />
+    </ListItemIcon>
+    {name}
+  </ListItem>
+);
+const Writer = ({ name }: { name: string }) => (
+  <ListItem>
+    <ListItemIcon>
+      <EditNoteIcon />
+    </ListItemIcon>
+    {name}
+  </ListItem>
+);
 
 export default function MovieDetailsPage() {
   const { query } = useRouter();
@@ -18,7 +50,6 @@ export default function MovieDetailsPage() {
   });
 
   if (isError) {
-    // TODO: Figure out the error object type definition
     return (
       <Alert severity="error" data-testid="movie-details-page-error">
         Error Status Code: {error?.response?.status} <br />
@@ -36,56 +67,75 @@ export default function MovieDetailsPage() {
   }
 
   // TODO: Clean up component
-  // TODO: Figre out how I want to lay out the data
+  // TODO: Figure out where I want to place the image
   // TODO: Write tests
+
   return (
-    <Grid container alignItems="center" paddingLeft={7} paddingBottom={7}>
-      <MovieCrumbs>{data?.title}</MovieCrumbs>
-      <Typography variant="h2" gutterBottom textAlign="center">
-        {data?.title}
-      </Typography>
-      <Grid container spacing={6}>
-        <Grid item>
-          <Typography variant="h6" textAlign="center">
-            Director: {data?.director}
-          </Typography>
-        </Grid>
-        <Grid item>
-          {/* TODO: Make a List Component */}
-          <Typography variant="h6" textAlign="center">
-            Movie Stars: {data?.actors}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant="h6" textAlign="center">
-            Rating: {data?.rating}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant="h6" textAlign="center">
-            {/* TODO: Reuse List Component Above  */}
-            Writers: {data?.writers}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant="h6" textAlign="center">
-            Year: {data?.year}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant="h6" textAlign="center">
-            Running Time: {data?.runningTime}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Image
-            alt={`${data?.title}`}
-            width={500}
-            height={700}
-            loading="lazy"
-            src={`https://image.tmdb.org/t/p/w500/${data?.posterPath}`}
-          />
-        </Grid>
+    <Grid
+      container
+      alignItems="center"
+      spacing={3}
+      paddingTop={3}
+      paddingLeft={7}
+      paddingBottom={7}
+    >
+      <Grid item xs={12} md={12}>
+        <MovieCrumbs>{data?.title}</MovieCrumbs>
+      </Grid>
+      <Grid item justifyContent="center" xs={12} md={12}>
+        <Typography variant="h2" gutterBottom textAlign="center">
+          {data?.title}
+        </Typography>
+      </Grid>
+      <Grid item xs={10} sm={4} md={3}>
+        <Card variant="outlined" sx={{ maxWidth: "200px" }}>
+          <CardContent>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Rating: {data?.rating}
+            </Typography>
+            <Typography variant="h5" component="div">
+              Release year: {data?.year}
+            </Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              Running Time: {data?.runningTime}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12}>
+        {/* TODO: Fix the hr running on too long */}
+        <hr />
+      </Grid>
+      <Grid item xs={12} md={4} lg={4}>
+        <Typography variant="h6">
+          Director: <Director name={data?.director} />
+        </Typography>
+      </Grid>
+      <Grid item xs={12} md={4} lg={4}>
+        <Typography variant="h6">Movie Stars: </Typography>
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          aria-label="contacts"
+        >
+          {data?.actors?.slice(0, 9).map((name: string) => (
+            <ActorItem key={name} name={name} />
+          ))}
+        </List>
+      </Grid>
+      <Grid item xs={12} md={4} lg={4}>
+        <Typography variant="h6">Writers:</Typography>
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          aria-label="contacts"
+        >
+          {data?.writers.slice(0, 9).map((name: string) => (
+            <Writer key={name} name={name} />
+          ))}
+        </List>
       </Grid>
     </Grid>
   );
