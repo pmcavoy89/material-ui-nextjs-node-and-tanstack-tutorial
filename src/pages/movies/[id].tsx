@@ -107,10 +107,13 @@ export default function MovieDetailsPage() {
               />
             </Typography>
             <Typography variant="h5" component="div">
-              Release year: {format(data?.year, "M/d/yyyy")}
+              Release: {format(data?.year, "M/d/yyyy")}
             </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            <Typography sx={{ fontSize: 12 }} color="text.secondary">
               Running Time: {data?.runningTime}
+            </Typography>
+            <Typography sx={{ fontSize: 12 }} color="text.secondary">
+              Film Rating: {data?.filmRating}
             </Typography>
           </CardContent>
         </Card>
