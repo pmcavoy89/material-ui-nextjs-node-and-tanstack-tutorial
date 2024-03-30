@@ -1,6 +1,7 @@
 export interface Movie {
   title: string;
-  year: number;
+  // TODO: Clean up the numbers
+  year: string | number;
   runningTime: string;
   rating: string;
   id: number;

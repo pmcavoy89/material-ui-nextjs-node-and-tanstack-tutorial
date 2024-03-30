@@ -18,7 +18,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import MovieCrumbs from "@/components/MovieCrumbs";
 import useMovieDetails from "@/hooks/useMovieDetails";
 import Head from "next/head";
-import { format } from "date-fns";
+import { formatDate } from "@/utils";
 
 const ActorItem = ({ name }: { name: string }) => (
   <ListItem>
@@ -107,7 +107,7 @@ export default function MovieDetailsPage() {
               />
             </Typography>
             <Typography variant="h5" component="div">
-              Release: {format(data?.year, "M/d/yyyy")}
+              Release: {formatDate(data?.year)}
             </Typography>
             <Typography sx={{ fontSize: 12 }} color="text.secondary">
               Running Time: {data?.runningTime}

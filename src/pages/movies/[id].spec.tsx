@@ -34,7 +34,7 @@ jest.mock("next/router", () => ({
 }));
 
 // TODO: Clean up code
-describe.only("Movie Details Page Spec", () => {
+describe("Movie Details Page Spec", () => {
   it("handles the error", async () => {
     // Arrange
     const config = {
@@ -109,6 +109,7 @@ describe.only("Movie Details Page Spec", () => {
     await waitFor(() => {
       expect(getAllByText("Some Movie")[0]).toBeInTheDocument();
       expect(getAllByText("Some Movie")[1]).toBeInTheDocument();
+      // Assert for the other parts of the response to show up
     });
   });
 });
