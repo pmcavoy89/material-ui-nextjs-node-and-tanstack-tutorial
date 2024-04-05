@@ -1,3 +1,4 @@
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 
-export const formatDate = (date: string): string => format(date, "M/d/yyyy");
+export const formatDate = (dateString: string): string =>
+  format(parseISO(dateString).toISOString(), "M/d/yyyy");
